@@ -1,4 +1,5 @@
 ---
+import Tag from "@components/Tag.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 
 const { frontmatter } = Astro.props;
@@ -12,9 +13,7 @@ const { frontmatter } = Astro.props;
     <aside>
       {
         frontmatter.tags.map((tag: string) => (
-          <p class="tag">
-            <a href={`/tags/${tag}`}>{tag}</a>
-          </p>
+          <Tag name={tag}/>
         ))
       }
     </aside>

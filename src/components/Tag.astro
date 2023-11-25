@@ -1,0 +1,16 @@
+---
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<p>
+  <a 
+    href={`/tags/${name}`}
+    aria-label={`Blog posts tagged with ${name}`}
+  >
+    {name}
+  </a>
+</p>
