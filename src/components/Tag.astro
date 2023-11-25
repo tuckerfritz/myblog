@@ -7,10 +7,11 @@ const { name } = Astro.props;
 ---
 
 <p>
-  <a 
+  <a
+    class="link"
     href={`/tags/${name}`}
     aria-label={`Blog posts tagged with ${name}`}
   >
-    {name}
+    #{name}
   </a>
 </p>

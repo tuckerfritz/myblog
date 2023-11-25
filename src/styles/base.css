@@ -4,16 +4,56 @@
 
 @layer base {
   html {
-    font-family: sans-serif;
+    @apply font-sans;
   }
   body {
-    margin: 0 auto;
-    width: 100%;
     max-width: 960px;
-    padding: 1rem;
-    line-height: 1.5;
+    @apply flex flex-col mx-auto w-full min-h-screen px-4 leading-normal;
+  }
+  main {
+    @apply grow;
   }
   * {
     box-sizing: border-box;
+  }
+  /* Headings */
+  h1 {
+    @apply text-4xl font-extrabold py-2;
+  }
+
+  h2 {
+    @apply text-3xl font-extrabold py-2;
+  }
+
+  h3 {
+    @apply text-2xl font-extrabold py-2;
+  }
+
+  h4 {
+    @apply text-xl font-extrabold py-2;
+  }
+  h5 {
+    @apply text-lg font-extrabold py-2;
+  }
+  h6 {
+    @apply font-extrabold py-2;
+  }
+  /* lists */
+  article ul {
+    @apply list-disc pl-6;
+  }
+  article ol {
+    @apply list-decimal pl-6;
+  }
+  /* links */
+  article a {
+    @apply link;
+  }
+}
+
+@layer components {
+  .link {
+    @apply hover:underline text-sky-600 decoration-sky-600 
+    visited:text-violet-800 visited:decoration-violet-800;
   }
 }
