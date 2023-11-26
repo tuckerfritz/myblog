@@ -4,27 +4,34 @@ import { getCollection } from "astro:content";
 import BaseLayout from "src/layouts/BaseLayout.astro";
 
 const posts = await getCollection("posts");
-const featuredPosts = posts.filter(post => post.data.featured)
-const recentPosts = posts.reverse().filter(post => !post.data.featured).slice(0, 3)
+const featuredPosts = posts.filter((post) => post.data.featured);
+const recentPosts = posts
+  .filter((post) => !post.data.featured)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
 ---
 
 <BaseLayout title="Home">
   <h1>Featured Posts</h1>
-  {featuredPosts.map((featuredPost) => (
-    <Card 
-      title={featuredPost.data.title}
-      slug={featuredPost.slug} 
-      pubDate={featuredPost.data.pubDate}
-      description={featuredPost.data.description}
-    />
-  ))}
+  {
+    featuredPosts.map((featuredPost) => (
+      <Card
+        title={featuredPost.data.title}
+        slug={featuredPost.slug}
+        pubDate={featuredPost.data.pubDate}
+        description={featuredPost.data.description}
+      />
+    ))
+  }
   <h1>Recent Posts</h1>
-  {recentPosts.map((recentPost) => (
-    <Card 
-      title={recentPost.data.title}
-      slug={recentPost.slug}
-      pubDate={recentPost.data.pubDate}
-      description={recentPost.data.description}
-    />
-  ))}
+  {
+    recentPosts.map((recentPost) => (
+      <Card
+        title={recentPost.data.title}
+        slug={recentPost.slug}
+        pubDate={recentPost.data.pubDate}
+        description={recentPost.data.description}
+      />
+    ))
+  }
 </BaseLayout>

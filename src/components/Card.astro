@@ -17,6 +17,6 @@ const dateString = pubDate.toLocaleDateString("en-US", {
 
 <section class="py-2">
   <h2><a class="link" href={`/posts/${slug}`}>{title}</a></h2>
-  <time datetime={dateIso}>{dateString}</time>
+  <p class="font-semibold">Published on <time datetime={dateIso}>{dateString}</time></p>
   <p>{description}</p>
 </section>

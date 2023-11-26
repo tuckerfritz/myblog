@@ -26,11 +26,8 @@
   h3 {
     @apply text-xl font-extrabold;
   }
-  h4 {
-    @apply text-lg font-extrabold;
-  }
-  h5 {
-    @apply font-extrabold;
+  article h1, article h2, article h3{ 
+    @apply pt-3;
   }
   /* lists */
   article ul {

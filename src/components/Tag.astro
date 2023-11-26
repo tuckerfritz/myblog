@@ -6,12 +6,10 @@ interface Props {
 const { name } = Astro.props;
 ---
 
-<p>
-  <a
-    class="link"
-    href={`/tags/${name}`}
-    aria-label={`Blog posts tagged with ${name}`}
-  >
-    #{name}
-  </a>
-</p>
+<a
+  class="link text-lg px-1"
+  href={`/tags/${name}`}
+  aria-label={`Blog posts tagged with ${name}`}
+>
+  #{name}
+</a>
