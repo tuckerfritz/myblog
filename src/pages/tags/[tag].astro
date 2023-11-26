@@ -18,14 +18,8 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
+
 <BaseLayout title={tag}>
   <h1>Posts tagged with {tag}</h1>
-  {posts.map((post) => (
-    <Card 
-      title={post.data.title}
-      slug={post.slug} 
-      pubDate={post.data.pubDate}
-      description={post.data.description}
-    />
-  ))}
+  {posts.map((post) => <Card slug={post.slug} frontmatter={post.data} />)}
 </BaseLayout>

@@ -1,6 +1,11 @@
 ---
 import Tag from "@components/Tag.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  frontmatter: CollectionEntry<"posts">["data"];
+}
 
 const { frontmatter } = Astro.props;
 ---
@@ -11,11 +16,7 @@ const { frontmatter } = Astro.props;
     <p class="font-semibold">Written by {frontmatter.author}</p>
     <slot />
     <aside>
-      {
-        frontmatter.tags.map((tag: string) => (
-          <Tag name={tag}/>
-        ))
-      }
+      {frontmatter.tags.map((tag: string) => <Tag name={tag} />)}
     </aside>
   </article>
 </BaseLayout>

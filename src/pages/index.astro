@@ -15,23 +15,13 @@ const recentPosts = posts
   <h1>Featured Posts</h1>
   {
     featuredPosts.map((featuredPost) => (
-      <Card
-        title={featuredPost.data.title}
-        slug={featuredPost.slug}
-        pubDate={featuredPost.data.pubDate}
-        description={featuredPost.data.description}
-      />
+      <Card slug={featuredPost.slug} frontmatter={featuredPost.data} />
     ))
   }
   <h1>Recent Posts</h1>
   {
     recentPosts.map((recentPost) => (
-      <Card
-        title={recentPost.data.title}
-        slug={recentPost.slug}
-        pubDate={recentPost.data.pubDate}
-        description={recentPost.data.description}
-      />
+      <Card slug={recentPost.slug} frontmatter={recentPost.data} />
     ))
   }
 </BaseLayout>
