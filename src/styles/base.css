@@ -18,22 +18,19 @@
   }
   /* Headings */
   h1 {
-    @apply text-4xl font-extrabold py-2;
+    @apply text-4xl font-extrabold;
   }
   h2 {
-    @apply text-3xl font-extrabold py-2;
+    @apply text-2xl font-extrabold;
   }
   h3 {
-    @apply text-2xl font-extrabold py-2;
+    @apply text-xl font-extrabold;
   }
   h4 {
-    @apply text-xl font-extrabold py-2;
+    @apply text-lg font-extrabold;
   }
   h5 {
-    @apply text-lg font-extrabold py-2;
-  }
-  h6 {
-    @apply font-extrabold py-2;
+    @apply font-extrabold;
   }
   /* lists */
   article ul {

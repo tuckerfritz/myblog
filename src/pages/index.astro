@@ -1,8 +1,30 @@
 ---
+import Card from "@components/Card.astro";
+import { getCollection } from "astro:content";
 import BaseLayout from "src/layouts/BaseLayout.astro";
+
+const posts = await getCollection("posts");
+const featuredPosts = posts.filter(post => post.data.featured)
+const recentPosts = posts.reverse().filter(post => !post.data.featured).slice(0, 3)
 ---
 
 <BaseLayout title="Home">
-  <h1>My Astro Learning Blog</h1>
-  <p>This is where I will post about my journey learning Astro.</p>
+  <h1>Featured Posts</h1>
+  {featuredPosts.map((featuredPost) => (
+    <Card 
+      title={featuredPost.data.title}
+      slug={featuredPost.slug} 
+      pubDate={featuredPost.data.pubDate}
+      description={featuredPost.data.description}
+    />
+  ))}
+  <h1>Recent Posts</h1>
+  {recentPosts.map((recentPost) => (
+    <Card 
+      title={recentPost.data.title}
+      slug={recentPost.slug}
+      pubDate={recentPost.data.pubDate}
+      description={recentPost.data.description}
+    />
+  ))}
 </BaseLayout>
