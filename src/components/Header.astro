@@ -1,21 +1,18 @@
 ---
 import { Image } from "astro:assets";
 ---
-<header class="flex justify-between py-4 text-xl">
+<header class="flex justify-between py-4 text-xl font-semibold border-b-2 border-sky-800">
   <a class="sr-only" href="#main-content">Skip to main content</a>
   <a href="/" title="Home">
-    <Image src="/logo.jpg" width="200" height="50" alt="logo"/>
+    <Image src="/logo.jpg" width="200" height="50" alt="tuckerfritz.dev"/>
   </a>
   <nav>
     <ul class="flex flex-row gap-x-4">
       <li>
-        <a href="/">Home</a>
+        <a class="text-black hover:text-sky-800" href="/posts">Posts</a>
       </li>
       <li>
-        <a href="/posts">Posts</a>
-      </li>
-      <li>
-        <a href="/tags">Tags</a>
+        <a class="text-black hover:text-sky-800" href="/tags">Tags</a>
       </li>
     </ul>
   </nav>

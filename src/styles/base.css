@@ -50,7 +50,7 @@
 
 @layer components {
   .link {
-    @apply hover:underline text-sky-600 decoration-sky-600 
+    @apply hover:underline text-sky-700 decoration-sky-700 
     visited:text-violet-800 visited:decoration-violet-800;
   }
 }
