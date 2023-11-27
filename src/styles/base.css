@@ -26,10 +26,17 @@
   h3 {
     @apply text-xl font-extrabold;
   }
+  h4 {
+    @apply font-extrabold;
+  }
   article h1,
   article h2,
   article h3 {
     @apply pt-3;
+  }
+  /* paragraphs */
+  article p {
+    @apply py-2;
   }
   /* lists */
   article ul {

@@ -1,0 +1,220 @@
+---
+title: Insights on Astro From a Newly Minted Blogger
+pubDate: 2023-11-26T22:57:44Z
+description: Astro provides a surprisingly pleasant developer experience when building statically generated sites.
+author: Tucker Fritz
+image:
+    url: https://docs.astro.build/assets/full-logo-light.png
+    alt: The full Astro logo.
+tags:
+    - astro
+    - blogging
+    - javascript
+    - tailwind
+    - mdx
+featured: false
+---
+Welcome to my new developer blog site. Here is where I intend to share my insights
+around the languages, frameworks, and principles that I learn about through both my professional experience
+as a software developer and as a hobbyist programmer.
+
+Today I want to share with you the insights I've gained from working with the Astro web framework in building a blog site.
+So you may be wondering:
+
+## Why Astro?
+There's a seemingly endless amount of javascript frameworks out there and more of them are being generated every day.
+Sometimes it can be overwhelming to decide which one to choose for the task at hand. However there are a few things to 
+consider to help you make that decision:
+
+### The Ultimate Goal
+
+My ultimate goal was pretty simple: build a statically generated blog site. I need it to be statically generated because I
+don't want to unnecessarily pay for server time when I can just deploy my static files to an S3 bucket or a CDN. This will
+rule out dynamic content like comments, but in my opinion that's a superfluous feature for a blog that realistically won't
+be seeing many users. 
+
+Astro supports SSG (static site generation) and it has a content collection API that is perfect for authoring blog 
+posts in Markdown (or it's significantly more powerful cousin [MDX](https://mdxjs.com/)).
+
+### Prior Experience
+
+Astro is what you could call a meta framework (no, not that kind of [Meta](https://about.meta.com/)). It lets you build and
+use components from other javascript frameworks like React, Vue, and Svelte. This makes it easy for developers to either
+migrate their existing projects to Astro or build a new project and leverage their past experience.
+
+My prior experience is using React to create dynamic web applications. It would be nice to leverage this prior experience
+in creating this site, although in this case it's not all that important because I'm doing this partly to gain new
+experiences in the web dev world.
+
+
+### Documentation and Community Support
+
+Documentation and community support is important if you plan on maintaining your project indefinitely into the future. On one hand
+you can argue that this isn't necessarily that important for a hobby site, on the other hand you don't want to potentially run 
+into a wall and then find out that there is no documentation or find out that the project is unmaintained and that bug you 
+found is never going to be patched.
+
+Astro has thorough [documentation](https://docs.astro.build/en/getting-started/). They even have 
+a [tutorial](https://docs.astro.build/en/tutorial/0-introduction/) specifically for creating a blog and it's geared towards 
+novice web developers so it's easy to follow and understand for anyone. As for the Astro community itself, I can't say 
+I have enough experience yet to be an accurate judge of it. I did notice that they direct people towards their Discord in the blog tutorial.
+So it's nice seeing that they do take an active step in fostering their own community.
+
+### The Determining Factor
+
+With all that being said, I could have easily chosen another framework that supports SSG like Next.js or Gatsby. The real
+determining factor for me was the support of multiple frameworks and the chance to play around with frameworks I've never
+used before in the same project. As of the publishing of this blog post I didn't get around to using any other frameworks
+in my Astro project, but perhaps that is a task to be completed and written up in another blog post.
+
+## What I liked About Astro
+Astro has a lot going for it. Here are some of the things that I found personally compelling:
+
+### Astro Makes it Really Simple to Ship Less JavaScript
+The only way I have any chance for this blog to be seen by any human eyeballs is for it to load exceptionally fast before
+the potential reader gets bored and has a chance to click away. Every kilobyte of JavaScript that I ship to the user works
+against that goal. Astro makes it really easy to reason about the JavaScript you ship to your users in two important ways.
+
+#### [Code Fences](https://docs.astro.build/en/core-concepts/astro-components/#the-component-script)
+
+Code fences are declared at the top of your Astro components with two triple dashes (```---```) that surround your imports and
+JavaScript statements.
+```js
+---
+import MyAwesomeCompponent from "@components/MyAwesomeComponent.astro";
+
+const myAwesomeData = await fetch("https://awesome-api.com/data").then(resp => resp.json());
+---
+<MyAwesomeComponent data={myAwesomeData}/>
+```
+Astro guarantees that the JavaScript in the code fence above will not be shipped to the user. In the case of a fully static site, it
+will only ever be ran once at build time.
+
+#### [Client Directives](https://docs.astro.build/en/reference/directives-reference/#client-directives)
+
+You may be wondering how to ship JavaScript to the client in case you need to add some interactivity to your site. You do this with
+client directives. Client directives tell Astro how you want to hydrate your interactive components on the client's page. Imagine that
+MyAwesomeComponent depends on client-side JavaScript for interactivity. You can tell astro to hydrate the component immediately upon
+page load like so:
+```js
+---
+import MyAwesomeCompponent from "@components/MyAwesomeComponent.astro";
+
+const myAwesomeData = await fetch("https://awesome-api.com/data").then(resp => resp.json());
+---
+<MyAwesomeComponent client:load data={myAwesomeData}/>
+```
+Besides "client:load", there are several other client directives for hydrating interactive components, the difference mainly being the level
+of priority of the hydration. This gives you fine-grained control over how your components are hydrated and therefore greater control over
+the performance of your site.
+
+Client directives are the ***only way*** that JavaScript can be shipped to the client in the Astro framework. Fewer client directives, less JavaScript,
+smaller bundle size, greater performance.
+
+### First Class Integrations for Popular Tools
+I've already mentioned that Astro supports using React, Svelte, and Vue components. Astro also provides official integrations for the following tools:
+* [TypeScript](https://docs.astro.build/en/guides/typescript/)
+* [Markdown & MDX](https://docs.astro.build/en/guides/markdown-content/)
+* [Tailwind](https://docs.astro.build/en/guides/integrations-guide/tailwind/)
+
+All of which I used when developing this site. The only thing I had to do to get them working was run a single npm command for each of them. I don't know
+about you, but I find that pretty impressive. The last thing I want to do when working on a personal project (or any project for that matter) 
+is to fiddle around with the configuration to get everything working correctly.
+
+The above list isn't a comprehensive list for official Astro integrations but they are the ones that I found useful for this project.
+You can find the complete list [here](https://docs.astro.build/en/guides/integrations-guide/).
+
+### Consistency With Existing Web Standards
+I was delightfully surprised by how Astro conforms to existing web standards. Astro supports JSX-like syntax that is reminiscent of the way
+you write JSX in a React project but with one key difference: ***You can write plain HTML with all of its native tags and attributes!*** Allow me to 
+illustrate the difference for those of you who are unfamiliar with JSX.
+
+**JSX**:
+```html
+<label htmlFor="name" className="primary-label">First Name<label>
+<input className="primary-input" id="name" type="text" name="firstName"/>
+```
+
+**Astro Markup / HTML**:
+```html
+<label for="name" class="primary-label">First Name<label>
+<input class="primary-input" id="name" type="text" name="firstName"/>
+```
+Astro Markup uses the same attributes that standard HTML uses. But wait. I thought that wasn't possible since *for* and *class* are
+[reserved words](https://legacy.reactjs.org/docs/dom-elements.html#htmlfor) in JavaScript? I guess Astro figured something 
+out that the React team couldn't.
+
+Keeping in line with the principle of using existing web standards, when you need to add styles to your component you simply add a
+```<style>``` tag to your component and when you want to add client-side interactivity you can simply add a ```<script>```
+tag to your component. This pretty much works as you would expect it to, however the CSS styles within a ```<style>``` tag are automatically
+scoped to the component by default with an escape hatch to make them globally scoped. Also, Astro does process the JavaScript you add within
+```<script>``` tags which allows for [several conveniences](https://docs.astro.build/en/guides/client-side-scripts/#script-processing) that I won't get
+into here.
+
+### The Content Collections API
+[Content collections](https://docs.astro.build/en/guides/content-collections/) are a beautiful little addition to the Astro framework 
+that makes authoring and publishing content that much easier. Essentially all you have to do is put all of the Markdown files that you author
+into a subfolder under ```src/content```, write a configuration file that describes the metadata included in the front matter of those Markdown files,
+and then use the ```getCollection``` or the ```getEntry``` imports to query for your Markdown files.
+
+The aforementioned configuration file provides type-checking and autocompletion in your code editor through the use of [Zod](https://zod.dev/) which 
+allows you to be confident that the properties on the content that you're querying actually exist. This provides a nice developer experience boost.
+
+One of the more powerful features besides type support is the ability to define references between different
+types of content (think about relationships if you're familiar with RDBMS). A property on a schema can be a reference to the same content type
+or another content type defined by a content schema in the configuration file. This also allows for type-checking on references.
+
+When I discovered the content collections API I knew that Astro was the right choice for developing my blog. Astro could've passed the buck to
+a third-party library to implement a similar feature. The fact that they chose to officially include this API within their framework
+tells me that they're thinking seriously about the use case of a blog author, my use case.
+
+## What I Disliked About Astro
+Enough with singing Astro's praises. With any framework, there's going to be things that you dislike or things that you think can be improved upon.
+
+### A Little Too Much Magic?
+In some ways, there's a beautiful simplicity to React components. Every component is a simple JavaScript function (or class). The JSX syntax itself
+is compiled down to JavaScript function calls. You can actually write React code without ever writing a single line of JSX. 
+
+This is not the case with Astro components. Astro uses a custom syntax that consists of a code fence, JSX-like markup, and optionally, script
+and style tags. You have to trust the Astro compiler to take that custom format and generate valid HTML, CSS, and JavaScript. That in and of itself
+isn't much different to trusting Babel to compile your JSX into JavaScript I suppose, but a React component is still very much a plain JavaScript function.
+You declare the function itself with its arguments, body, and return value. In an Astro component it's done like this:
+
+```js
+---
+import AnotherComponent from "@components/AnotherComponent.astro";
+
+interface Props {
+    title: string;
+    author: string;
+    description: string;
+}
+
+const { title, author, description } = Astro.props;
+---
+<div>
+    <h1>{title}</h1>
+    <p>Written by {author}</p>
+    <p>{description}</p>
+    <AnotherComponent />
+    <slot />
+</div>
+```
+
+```Astro.props``` is magically typed with the Props interface. The Astro property itself is globally available in all astro files. It's a distinctly different
+feeling for me than just writing a component as a function.
+
+You might be wondering what that special ```<slot />``` element is. To pass in another component as a child of this one, I placed a 
+```<slot/>``` element in the markup where I want that child component to appear. In React, the children prop is passed in like any other function 
+argument. Here the framework magically injects child elements into the slot;
+
+This may seem like a minor quibble, mainly because it is. I can't really be one to complain about magic when I'm using a JavaScript meta-framework, now can I? 
+But I would be remiss if I didn't include my complete thoughts on Astro, both positive and negative, in this blog post. 
+
+## Conclusion
+I found Astro to be a great solution for creating my personal blogging website. For me the positives vastly outweighed the negatives. You may think that
+a meta-framework like this is overkill for a simple blogging website. However, I found Astro to be perfectly tailored to my use case and I found
+the overall experience to be a breeze. That being said, I can't speak to the use cases where SSR may be required as I haven't yet used those features.
+Although I can say that if you were thinking of using Astro to build your blog, you should definitely go for it.
+
+***This blog post was not sponsored by Astro.***
