@@ -1,4 +1,4 @@
-https://tuckerfritz.com       https://tuckerfritz.dev
-https://www.tuckerfritz.com   https://tuckerfritz.dev
-https://tuckerfritz.com/*     https://tuckerfritz.dev/:splat
-https://www.tuckerfritz.com/* https://tuckerfritz.dev/:splat
+https://tuckerfritz.com       https://tuckerfritz.dev         301!
+https://www.tuckerfritz.com   https://tuckerfritz.dev         301!
+https://tuckerfritz.com/*     https://tuckerfritz.dev/:splat  301!
+https://www.tuckerfritz.com/* https://tuckerfritz.dev/:splat  301!
