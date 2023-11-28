@@ -1,0 +1,4 @@
+https://tuckerfritz.com       https://tuckerfritz.dev
+https://www.tuckerfritz.com   https://tuckerfritz.dev
+https://tuckerfritz.com/*     https://tuckerfritz.dev/:splat
+https://www.tuckerfritz.com/* https://tuckerfritz.dev/:splat
