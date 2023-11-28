@@ -4,8 +4,8 @@ import { getCollection } from "astro:content";
 export async function GET() {
   const posts = await getCollection("posts");
   return rss({
-    title: "Tucker Fritz | Blog",
-    description: "My journey learning Astro",
+    title: "tuckerfritz.dev | Blog",
+    description: "Keep up to date with the latest blog posts from tuckerfritz.dev",
     site: "https://tuckerfritz.dev/",
     items: posts.map((post) => ({
       title: post.data.title,

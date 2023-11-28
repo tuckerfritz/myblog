@@ -1,11 +1,22 @@
 ---
-const platform = "github";
-const username = "tuckerfritz";
+import { Image } from "astro:assets";
+import githubSvg from "@assets/icons/github.svg";
+import rssSvg from "@assets/icons/rss.svg";
 ---
 
-<footer class="py-3 text-lg border-t-2 border-sky-800">
-  <p>
-    Learn more about my projects on
-    <a class="link" href={`https://www.${platform}.com/${username}`}>{platform}</a>!
-  </p>
+<footer class="h-14 py-3 text-lg border-t-2 border-sky-800">
+  <ul class="flex gap-3 justify-end">
+    <li>
+      <a href="https://github.com/tuckerfritz">
+        <span class="sr-only">Link to my github</span>
+        <Image role="presentation" src={githubSvg} alt="Link to my github" height="25" width="25"/>
+      </a>
+    </li>
+    <li>
+      <a href="/rss.xml">
+        <span class="sr-only">Link to rss feed</span>
+        <Image role="presentation" src={rssSvg} alt="Link to rss feed" height="25" width="25"/>
+      </a>
+    </li>
+  </ul>
 </footer>
