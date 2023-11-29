@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import logo from "@assets/logo.jpg";
 import xmark from "@assets/icons/xmark.svg";
 import menu from "@assets/icons/menu.svg";
 ---
@@ -9,7 +10,7 @@ import menu from "@assets/icons/menu.svg";
 >
   <a class="sr-only" href="#main-content">Skip to main content</a>
   <a href="/" title="Home">
-    <Image src="/logo.jpg" width="200" height="45" alt="tuckerfritz.dev" />
+    <Image src={logo} width="200" height="45" alt="tuckerfritz.dev" />
   </a>
   <button
     type="button"
