@@ -1,13 +1,71 @@
 ---
 import { Image } from "astro:assets";
+import xmark from "@assets/icons/xmark.svg";
+import menu from "@assets/icons/menu.svg";
 ---
-<header class="flex justify-between h-14 py-2 text-xl font-semibold border-b-2 border-sky-800">
+
+<header
+  class="flex justify-between h-14 py-2 text-xl font-semibold border-b-2 border-sky-800"
+>
   <a class="sr-only" href="#main-content">Skip to main content</a>
   <a href="/" title="Home">
-    <Image src="/logo.jpg" width="200" height="45" alt="tuckerfritz.dev"/>
+    <Image src="/logo.jpg" width="200" height="45" alt="tuckerfritz.dev" />
   </a>
-  <nav>
-    <ul class="flex flex-row gap-x-4">
+  <button
+    type="button"
+    aria-label="open primary navigation"
+    class="nav-button sm:hidden"
+  >
+    <Image
+      role="presentation"
+      src={menu}
+      alt="open primary navigation"
+      height="25"
+      width="25"
+    />
+  </button>
+  <nav
+    id="primary-navigation"
+    aria-label="primary-navigation"
+    class=`
+    sm:static 
+    sm:h-auto 
+    sm:w-auto
+    sm:border-0
+    sm:drop-shadow-none
+    sm:block
+    fixed 
+    right-0 
+    top-0 
+    h-full 
+    w-72 
+    z-50 
+    drop-shadow-lg
+    border-l-2
+    border-gray-300 
+    bg-white
+    flex
+    flex-row-reverse
+    justify-between
+    hidden
+    `
+  >
+    <button
+      type="button"
+      aria-label="close menu"
+      class="nav-button block sm:hidden h-fit pr-4 pt-4"
+    >
+      <Image
+        role="presentation"
+        src={xmark}
+        alt="close menu"
+        height="25"
+        width="25"
+      />
+    </button>
+    <ul
+      class="sm:flex sm:flex-row sm:gap-x-4 sm:p-0 flex flex-col gap-y-4 pt-4 pl-4"
+    >
       <li>
         <a class="text-black hover:text-sky-800" href="/posts">Posts</a>
       </li>
@@ -17,3 +75,12 @@ import { Image } from "astro:assets";
     </ul>
   </nav>
 </header>
+
+<script>
+  const buttons = document.getElementsByClassName("nav-button");
+  for (let button of buttons) {
+    button.addEventListener("click", () => {
+      document.getElementById("primary-navigation")?.classList.toggle("hidden");
+    });
+  }
+</script>
