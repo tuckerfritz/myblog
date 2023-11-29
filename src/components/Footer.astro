@@ -7,15 +7,13 @@ import rssSvg from "@assets/icons/rss.svg";
 <footer class="h-14 py-3 text-lg border-t-2 border-sky-800">
   <ul class="flex gap-3 justify-end">
     <li>
-      <a href="https://github.com/tuckerfritz">
-        <span class="sr-only">Link to my github</span>
-        <Image role="presentation" src={githubSvg} alt="Link to my github" height="25" width="25"/>
+      <a href="https://github.com/tuckerfritz" aria-label="link to my github">
+        <Image src={githubSvg} alt="" height="25" width="25"/>
       </a>
     </li>
     <li>
-      <a href="/rss.xml">
-        <span class="sr-only">Link to rss feed</span>
-        <Image role="presentation" src={rssSvg} alt="Link to rss feed" height="25" width="25"/>
+      <a href="/rss.xml" aria-label="link to rss feed">
+        <Image src={rssSvg} alt="" height="25" width="25"/>
       </a>
     </li>
   </ul>
