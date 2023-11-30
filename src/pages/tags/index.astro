@@ -7,7 +7,7 @@ const posts = await getCollection("posts");
 const tags = [...new Set(posts.map((post) => post.data.tags).flat())].sort((a, b) => a.localeCompare(b));
 ---
 
-<BaseLayout title="tags">
+<BaseLayout title="Tags" description="Find related blog posts by tag.">
   <h1>Tags</h1>
   <>
     {

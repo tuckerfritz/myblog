@@ -8,7 +8,7 @@ const posts = (await getCollection("posts")).sort(
 );
 ---
 
-<BaseLayout title="Posts">
+<BaseLayout title="Posts" description="View every post ever posted from this blog.">
   <h1>Posts</h1>
   {posts.map((post) => <Card slug={post.slug} frontmatter={post.data} />)}
 </BaseLayout>
