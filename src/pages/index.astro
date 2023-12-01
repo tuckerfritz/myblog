@@ -1,5 +1,5 @@
 ---
-import Card from "@components/Card.astro";
+import Card from "@components/Card.svelte";
 import { getCollection } from "astro:content";
 import BaseLayout from "src/layouts/BaseLayout.astro";
 
@@ -33,13 +33,23 @@ const recentPosts = posts
   {featuredPosts.length ? <h1>Featured Posts</h1> : null}
   {
     featuredPosts.map((featuredPost) => (
-      <Card slug={featuredPost.slug} frontmatter={featuredPost.data} />
+      <Card
+        slug={featuredPost.slug}
+        title={featuredPost.data.title}
+        pubDate={featuredPost.data.pubDate}
+        description={featuredPost.data.description}
+      />
     ))
   }
   <h1>Recent Posts</h1>
   {
     recentPosts.map((recentPost) => (
-      <Card slug={recentPost.slug} frontmatter={recentPost.data} />
+      <Card
+        slug={recentPost.slug}
+        title={recentPost.data.title}
+        pubDate={recentPost.data.pubDate}
+        description={recentPost.data.description}
+      />
     ))
   }
 </BaseLayout>

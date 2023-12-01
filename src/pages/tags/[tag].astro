@@ -1,5 +1,5 @@
 ---
-import Card from "@components/Card.astro";
+import Card from "@components/Card.svelte";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
@@ -21,5 +21,14 @@ const { posts } = Astro.props;
 
 <BaseLayout title={tag} description={`View all blog posts tagged by ${tag}.`}>
   <h1>Posts tagged with {tag}</h1>
-  {posts.map((post) => <Card slug={post.slug} frontmatter={post.data} />)}
+  {
+    posts.map((post) => (
+      <Card
+        slug={post.slug}
+        title={post.data.title}
+        pubDate={post.data.pubDate}
+        description={post.data.description}
+      />
+    ))
+  }
 </BaseLayout>

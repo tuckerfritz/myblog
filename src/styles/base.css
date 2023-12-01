@@ -18,7 +18,7 @@
   }
   /* Headings */
   h1 {
-    @apply text-4xl font-extrabold;
+    @apply text-4xl font-extrabold; 
   }
   h2 {
     @apply text-2xl font-extrabold;
@@ -40,10 +40,10 @@
   }
   /* lists */
   article ul {
-    @apply list-disc pl-6;
+    @apply list-disc list-inside;
   }
   article ol {
-    @apply list-decimal pl-6;
+    @apply list-decimal list-inside;
   }
   /* links */
   article a {
@@ -57,7 +57,10 @@
 
 @layer components {
   .link {
-    @apply hover:underline text-sky-700 decoration-sky-700 
+    @apply hover:underline text-sky-800 decoration-sky-800 
     visited:text-violet-800 visited:decoration-violet-800;
+  }
+  .main-heading {
+    @apply py-3;
   }
 }
