@@ -3,3 +3,8 @@ type PostMetadata = Pick<
   "title" | "pubDate" | "description"
 > &
   Pick<CollectionEntry<"posts">, "slug">;
+
+type PostIndexResp = {
+  index: import("fuse.js").FuseIndex<PostMetadata>;
+  metadata: PostMetadata[];
+};

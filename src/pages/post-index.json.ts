@@ -6,8 +6,14 @@ export async function GET() {
   const postMetadata = posts.map((post) => ({
     slug: post.slug,
     title: post.data.title,
+    pubDate: post.data.pubDate,
     description: post.data.description,
   }));
   const postIndex = fuse.createIndex(["title", "description"], postMetadata);
-  return new Response(JSON.stringify(postIndex.toJSON()));
+  return new Response(
+    JSON.stringify({
+      index: postIndex.toJSON(),
+      metadata: postMetadata,
+    })
+  );
 }
