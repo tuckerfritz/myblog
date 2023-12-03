@@ -10,14 +10,14 @@ import menu from "@assets/icons/menu.svg";
 >
   <a class="sr-only" href="#main-content">Skip to main content</a>
   <a href="/" title="Home">
-    <Image src={logo} width="200" height="45" alt="tuckerfritz.dev" />
+    <Image src={logo} width="200" height="45" alt="tuckerfritz.dev" loading="eager"/>
   </a>
   <button
     type="button"
     aria-label="open primary navigation"
     class="nav-button sm:hidden"
   >
-    <Image src={menu} alt="" height="25" width="25" />
+    <Image src={menu} alt="" height="25" width="25" loading="eager"/>
   </button>
   <nav
     id="primary-navigation"
@@ -48,7 +48,7 @@ import menu from "@assets/icons/menu.svg";
       aria-label="close menu"
       class="nav-button block sm:hidden h-fit pr-4 pt-4"
     >
-      <Image src={xmark} alt="" height="25" width="25" />
+      <Image src={xmark} alt="" height="25" width="25" loading="eager"/>
     </button>
     <ul
       class="sm:flex sm:flex-row sm:gap-x-5 sm:p-0 flex flex-col gap-y-5 pt-4 pl-4"
