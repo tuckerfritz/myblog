@@ -5,6 +5,9 @@
 @layer base {
   html {
     @apply font-sans;
+    /* Prevent page shift when navigating to page with vertical scrollbar */
+    overflow-x: hidden;
+    margin-right: calc(-1 * (100vw - 100%));
   }
   body {
     max-width: 960px;
