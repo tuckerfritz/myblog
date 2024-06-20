@@ -1,0 +1,242 @@
+---
+title: Implementing Search With Astro, Svelte, and Fuse.js
+pubDate: 2024-06-19T21:00:00Z
+description: Implementing search for your static blog site might be easier than you think.
+author: Tucker Fritz
+tags:
+    - astro
+    - svelte
+    - fusejs
+featured: false
+---
+In this post you will learn how to set up search functionality
+for a static site without much effort at all. I had actually implemented this
+functionality for this site late last year but I figure now is as good of a
+time as any to explain how.
+
+## What the tech?
+Our search functionality will be driven by Fuse.js. Fuse.js is a good choice for
+us because it allows us to create a searchable index of our blog posts at build
+time that can be deployed to a CDN and fetched by the client later when they
+go to search. There are other libraries that allow us to do the same thing but
+Fuse.js is often recommended and it's a popular choice and reasonably
+well-maintained.
+
+Since this is an Astro blog the examples will be shown in the context of
+the Astro framework. I also chose to use Svelte components to implement
+this functionality, mostly because I desired to learn a bit more about
+Svelte, but with little web dev experience you should be able to translate
+the core concepts to other component libraries and frameworks.
+
+If you don't have any web dev experience or don't feel up to the task, 
+you may follow along using Astro and Svelte or optionally clone the source code 
+for this site to your machine (my github is linked in the footer).
+
+## Serving up the Data
+The first step in adding search functionality is to create the list and
+search index that will be utilized by Fuse.js client-side to fuzzily match 
+a user's query to the title or description of a blog post.
+
+Since I'm using Astro, the easiest way to do this is to leverage Astro's endpoint
+functionality. The name "endpoint" is a bit misleading because with
+statically generated sites the "endpoint" is just a file (in this case a JSON file)
+that is generated at build time and placed in the dist folder.
+
+To create this Astro endpoint we will create a file named "post-index.json.ts" at
+the root of the pages directory. Within that file we want to export an async function
+with the name of GET. In this function we will use Astro's content collection API to
+fetch our blog posts' metadata as well as create an index with fuse.createIndex.
+In this case our endpoint looks like this:
+```js
+/*
+  src/pages/post-index.json.ts
+*/
+import { getCollection } from "astro:content";
+import fuse from "fuse.js";
+
+export async function GET() {
+  const posts = await getCollection("posts");
+  const postMetadata = posts.map((post) => ({
+    slug: post.slug,
+    title: post.data.title,
+    pubDate: post.data.pubDate,
+    description: post.data.description,
+  }));
+  const postIndex = fuse.createIndex(["title", "description"], postMetadata);
+  return new Response(
+    JSON.stringify({
+      index: postIndex.toJSON(),
+      metadata: postMetadata,
+    })
+  );
+}
+```
+It's important to note that you shouldn't be saving any metadata that you won't
+need to get back when performing a search. For my purposes, all that I need is
+the slug, title, pubDate, and description. The slug is for navigation to the blog
+post when a search result is clicked on and the other properties are used when
+displaying the search results to the user.
+
+You'll notice that when creating the index the first argument I provide is an array of
+"title" and "description". These are the keys I want the users of my website
+to search against. I don't include the content of the blog post because I don't
+want to bloat the size of the statically generated file. We want the list and
+search index to be loaded as quickly as possible so that the user doesn't have to
+wait much time at all to begin searching.
+
+## Using the Data
+Now we have our list and a pre-generated search-index but we still don't
+have a way for users of this site to use it. For my purposes it made
+sense to create a new page for this functionality. The page itself doesn't need
+to be complex. For this site it just consists of an header and a Search component
+like so:
+```js
+---
+/*
+  src/pages/search/index.astro
+*/
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Search from "@components/Search.svelte";
+---
+
+<BaseLayout
+  title="Search"
+  description="Search for blog posts."
+>
+  <h1>Search</h1>
+  <Search client:load />
+</BaseLayout>
+```
+Don't worry too much about the "BaseLayout" component. All that does it take the title and description props
+and inserts it into the head element of the generated HTML. It also renders the Header and Footer component
+so they appear consistently on every page.
+
+The real complexity is hiding behind the "Search" component, which as you can see in the example above includes
+a client directive that tells Astro to hydrate the generated HTML with JavaScript as soon it is loaded
+by the client.
+
+Instead of showing you the entire component at once I'll break it down piece by piece.
+
+To start off we need to keep track of three things:
+1. The fuse instance
+2. The user's query
+3. The search results
+
+Since I'm using Svelte these are just three variables declared at the start of the file
+in the script tag, like so:
+```js
+<script lang="ts">
+  /* import statements here*/
+
+  let fuse: Fuse<PostMetadata>;
+  let searchParam: string;
+  let searchResults: FuseResult<PostMetadata>[] = [];
+
+...
+</script>
+```
+
+If I was using React, I might store the fuse instance in a useRef hook, the searchParam
+as state, and the searchResults would be derived state from the fuse instance and the
+search param, memoized with useMemo.
+
+The next step is to create a function that fetches our pre-generated file, uses that
+file to create the fuse instance, and finally gets the initial search results. In my case that
+function looks like this:
+```js
+  const fetchData = async () => {
+    const response = await fetch("/post-index.json");
+    if(!response.ok) {
+      throw new Error();
+    }
+    const data: PostIndexResp = await response.json();
+    const postIndex: FuseIndex<PostMetadata> = Fuse.parseIndex(data.index);
+    fuse = new Fuse(
+      data.metadata,
+      { keys: ["title", "description"] },
+      postIndex
+    ) as Fuse<PostMetadata>;
+    /* Get search parameter from URL */
+    searchParam = new URLSearchParams(window.location.search).get("q") ?? "";
+    searchResults = fuse.search(searchParam);
+  };
+```
+I'm using URL query parameters here because I want search results to be shareable via
+URL but you don't have to do it this way, of course. And yes, that seemingly unhandled
+error might look a little scary out of context but it will make sense with in my next code
+sample. 
+
+Obviously now we need to use this function to fetch our data and display the results
+to the user. Svelte makes this especially easy with their logic blocks, especially
+their await block. With an await block we can fetch the data, show an initial loading
+state while the promise is pending, and then display one result
+if the promise resolves and another if it is rejected. In this case it looks like this:
+```js
+{#await fetchData()}
+  <Spinner />
+{:then}
+  <label class="sr-only" for="search"> Search </label>
+  <input
+    id="search"
+    type="search"
+    placeholder="Start typing..."
+    value={searchParam}
+    on:input={onInput}
+  />
+  <span>{searchResults.length} Results</span>
+  <ol aria-label="search-results">
+    {#each searchResults as post}
+      <li>
+        <Card
+          slug={post.item.slug}
+          title={post.item.title}
+          pubDate={post.item.pubDate}
+          description={post.item.description}
+        />
+      </li>
+    {/each}
+  </ol>
+{:catch}
+  <span> Error loading search index. Search unavailable.</span>
+{/await}
+```
+Hopefully the example is somewhat self-explanatory. We're waiting for fetchData
+to resolve and while we do that we display a loading "Spinner" component. When
+it's resolved the markup within the "\{:then}" block is displayed. Our search
+bar just consists of a label and an input of type "search". The search results
+are displayed in a list where each list element is a "Card" component which
+takes the responsibility of displaying an overview of a blog post to a user.
+Finally, if the error rejects, some text is rendered explaining to the user
+that the search functionality is currently unavailable.
+
+If you're wondering what the onInput handler looks like, it simply takes the
+value from the input when it changes, puts that in the URL via URLSearchParams
+and does a search on the value with the fuse instance.
+
+The full code is viewable on [github](https://github.com/tuckerfritz/myblog).
+
+## Closing Thoughts
+I didn't expect search to be this easy to implement but the combination of Fuse.js,
+Astro's endpoint functionality, and Svelte's await logic block made it really easy.
+I don't suspect using other libraries/frameworks would make it
+much more difficult either. If I was to use React I'd have to do my due diligence to 
+properly keep track of loading and error states or I could outsource that responsibility
+to another library like react-query which seems to be fashionable nowadays.
+
+I could be a bit more diligent about my bundle size and use a plain Astro component so I
+won't have to ship the entire Svelte framework (a whopping 2.8 MB) with my "Search" component.
+That is a drawback of using component libraries/frameworks in your Astro projects, but it is
+oh so tempting because of the conveniences they offer.
+
+When considering whether to use Fuse.js you have to think about some of the performance
+implications of its implementation. If your static blog site is like most with just a few
+posts published to it every once in a while, it's a great solution. However, if you're
+talking about many thousands of potential search results then that's when this solution
+starts to break down. The time Fuse takes to search on a list increases linearly with the
+size of that list. Also the bigger the list of items and the bigger the search index the
+longer it takes to fetch the statically generated file from your CDN or webserver to the 
+client. At that point you are forced to consider a dynamically generated site or an always
+online web API that can respond to users' search queries.
+
+With all of that considered, I hope that you find this blog post useful in implementing search 
+for your own static site or you at least learned a little bit more about the topic.
