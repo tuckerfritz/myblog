@@ -88,7 +88,7 @@ wait much time at all to begin searching.
 Now we have our list and a pre-generated search-index but we still don't
 have a way for users of this site to use it. For my purposes it made
 sense to create a new page for this functionality. The page itself doesn't need
-to be complex. For this site it just consists of an header and a Search component
+to be complex. For this site it just consists of the BaseLayout and Search components
 like so:
 ```js
 ---
@@ -224,7 +224,7 @@ properly keep track of loading and error states or I could outsource that respon
 to another library like react-query which seems to be fashionable nowadays.
 
 I could be a bit more diligent about my bundle size and use a plain Astro component so I
-won't have to ship the entire Svelte framework (a whopping 2.8 MB) with my "Search" component.
+won't have to ship the entire Svelte library with my "Search" component.
 That is a drawback of using component libraries/frameworks in your Astro projects, but it is
 oh so tempting because of the conveniences they offer.
 
